@@ -9,12 +9,12 @@
 import UIKit
 import CoreData
 
+let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+let managedContext = appDelegate.managedObjectContext
+
 extension ViewController{
     
     func saveName(name: String){
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
-        
         if let entity = NSEntityDescription.entityForName("Person",inManagedObjectContext:managedContext){
             let person = NSManagedObject(entity: entity, insertIntoManagedObjectContext: managedContext)
             person.setValue(name, forKey: "name")
@@ -30,8 +30,7 @@ extension ViewController{
     
     func fetchDataFromEntity() -> [NSManagedObject]{
         var people = [NSManagedObject]()
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
+        
         let fetchRequest = NSFetchRequest(entityName: "Person")
         do{
             people = try managedContext.executeFetchRequest(fetchRequest) as! [NSManagedObject]

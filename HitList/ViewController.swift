@@ -14,6 +14,7 @@ import CoreData
 class ViewController: UIViewController {
 
     @IBOutlet var tableView: UITableView!
+    
     var people = [NSManagedObject]()
     
     override func viewDidLoad() {
@@ -41,6 +42,24 @@ class ViewController: UIViewController {
         cell!.textLabel!.text =
             person.valueForKey("name") as? String
         return cell!
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        //Putting some Animation
+        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Right)
+        managedContext.deleteObject(people[indexPath.row])
+        people.removeAtIndex(indexPath.row)
+        tableView.reloadData()
+        do {
+            try managedContext.save()
+            print("saved!")
+        } catch let error as NSError  {
+            print("Could not save \(error), \(error.userInfo)")
+        } catch {
+            
+        }
     }
     
     @IBAction func addName(sender: AnyObject) {
